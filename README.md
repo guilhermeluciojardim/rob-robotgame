@@ -10,13 +10,13 @@
 
 > In this project, I'll be creating a game from a robot named Rob, where he travels and tries to find his way home by dodging obstacles, dealing with puzzles and other dangers in the way
 
-### Next ajusts and improvements
+### Next adjusts and improvements
 
 - [ ] Set cameras around the player
-- [ ] Create player controler
+- [ ] Create player controller
 - [ ] Create obstacles and map
 - [ ] Create puzzles
-- [ ] Create GameManager
+- [ ] Create Game Manager
 - [ ] Create Game Menu
 - [ ] Project Optimization
 - [ ] Build Project
