@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
-  walkSpeed: 5
+  walkSpeed: 3
   runSpeed: 7
   isGrounded: 0
   groundCheckDistance: 0.2
@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -476,6 +477,19 @@ Transform:
   m_Father: {fileID: 838267600}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 25, y: -5, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c2a5d1269229445aea61474d267ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensitivity: 250
 --- !u!1001 &2095790446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -484,6 +498,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 838267600}
     m_Modifications:
+    - target: {fileID: 2836004473841745626, guid: f432554f564e69242897607d34218939, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 894e8455598b5a943b2302b2b998b5df, type: 2}
     - target: {fileID: 2836004475591197023, guid: f432554f564e69242897607d34218939, type: 3}
       propertyPath: m_RootOrder
       value: -1

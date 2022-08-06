@@ -21,15 +21,19 @@ public class PlayerController : MonoBehaviour
 
    //References
    private CharacterController controller;
+   private Animator anim;
 
    private void Start(){
         
         controller = GetComponent<CharacterController>();
-
+        anim = GetComponentInChildren<Animator>();
    }
 
     private void Update(){
         Move();
+        if (Input.GetKeyDown(KeyCode.Mouse0)){
+            Shoot();
+        }
     }
 
     private void Move(){
@@ -42,6 +46,7 @@ public class PlayerController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
         
         moveDirection = new Vector3(0,0,moveZ);
+        moveDirection = transform.TransformDirection(moveDirection);
 
         if (isGrounded){
             if ((moveDirection != Vector3.zero) && (!Input.GetKey(KeyCode.LeftShift))){
@@ -67,15 +72,22 @@ public class PlayerController : MonoBehaviour
 
     }
     private void Idle(){
-
+        anim.SetFloat("Speed", 0,0.1f,Time.deltaTime);
     }
     private void Walk(){
         moveSpeed = walkSpeed;
+        anim.SetFloat("Speed", 0.5f,0.1f,Time.deltaTime);
     }
     private void Run(){
         moveSpeed = runSpeed;
+        anim.SetFloat("Speed", 1,0.1f,Time.deltaTime);
     }
     private void Jump(){
         velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        anim.SetTrigger("Jump");
+    }
+
+    private void Shoot(){
+        anim.SetTrigger("Shoot");
     }
 }
