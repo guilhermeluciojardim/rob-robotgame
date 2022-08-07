@@ -44,29 +44,33 @@ public class PlayerController : MonoBehaviour
         }
 
         float moveZ = Input.GetAxis("Vertical");
+        float moveX = Input.GetAxis("Horizontal");
         
-        moveDirection = new Vector3(0,0,moveZ);
+        moveDirection = new Vector3(moveX,0,moveZ);
         moveDirection = transform.TransformDirection(moveDirection);
 
         if (isGrounded){
             if ((moveDirection != Vector3.zero) && (!Input.GetKey(KeyCode.LeftShift))){
             Walk();
             }
-             else if ((moveDirection != Vector3.zero) && (Input.GetKey(KeyCode.LeftShift))){
+            else if ((moveDirection != Vector3.zero) && (Input.GetKey(KeyCode.LeftShift))){
             Run();
             }
             else if (moveDirection == Vector3.zero){
-                Idle();
+            Idle();
             }
             moveDirection *= moveSpeed;
 
             if (Input.GetKeyDown(KeyCode.Space)){
                 Jump();
             }
+            if (Input.GetKeyDown(KeyCode.R)){
+                Reload();
+            }
+            
         }     
 
         controller.Move(moveDirection * Time.deltaTime);
-
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
@@ -80,7 +84,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Run(){
         moveSpeed = runSpeed;
-        anim.SetFloat("Speed", 1,0.1f,Time.deltaTime);
+        anim.SetFloat("Speed", 1f,0.1f,Time.deltaTime);
     }
     private void Jump(){
         velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
@@ -89,5 +93,8 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot(){
         anim.SetTrigger("Shoot");
+    }
+    private void Reload(){
+        anim.SetTrigger("Reload");
     }
 }
