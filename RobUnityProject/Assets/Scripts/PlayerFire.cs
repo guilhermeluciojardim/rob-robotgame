@@ -35,7 +35,8 @@ public class PlayerFire : MonoBehaviour
     }
     void OnCollisionEnter(Collision collider){
         if (collider.gameObject.CompareTag("Terrain")){
-            
+            GameObject blow = GameObject.Instantiate(explosion, weaponPos.position,weaponPos.rotation) as GameObject;
+		    GameObject.Destroy(blow, 3f);
         }
    }
 }
