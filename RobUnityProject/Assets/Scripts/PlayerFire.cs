@@ -12,7 +12,6 @@ public class PlayerFire : MonoBehaviour
 
     public GameObject shotPrefab;
     public Transform weaponPos;
-    public GameObject explosion;
 
 
     // Start is called before the first frame update
@@ -31,13 +30,8 @@ public class PlayerFire : MonoBehaviour
 
     private void Fire(){
         GameObject shot = GameObject.Instantiate(shotPrefab, weaponPos.position,weaponPos.rotation) as GameObject;
-		GameObject.Destroy(shot, 3f);
+		GameObject.Destroy(shot, 2f);
     }
-    void OnCollisionEnter(Collision collider){
-        if (collider.gameObject.CompareTag("Terrain")){
-            GameObject blow = GameObject.Instantiate(explosion, weaponPos.position,weaponPos.rotation) as GameObject;
-		    GameObject.Destroy(blow, 3f);
-        }
-   }
+    
 }
 
