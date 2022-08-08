@@ -139,9 +139,10 @@ GameObject:
   - component: {fileID: 740645621}
   - component: {fileID: 740645619}
   - component: {fileID: 740645620}
+  - component: {fileID: 740645622}
   m_Layer: 6
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -206,6 +207,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &740645622
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740645618}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &838267597
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,6 +233,7 @@ GameObject:
   - component: {fileID: 838267599}
   - component: {fileID: 838267598}
   - component: {fileID: 838267601}
+  - component: {fileID: 838267602}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -298,6 +314,20 @@ MonoBehaviour:
     m_Bits: 64
   gravity: -9.81
   jumpHeight: 1.5
+--- !u!114 &838267602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838267597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2916cd6afd1e602459e3ff88886bf818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shotPrefab: {fileID: 136330, guid: 9a0c3383523899643a8d0661cfaca4e4, type: 3}
+  weaponPos: {fileID: 2018205239}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +426,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 250
+--- !u!4 &2018205239 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2018205239, guid: f432554f564e69242897607d34218939, type: 3}
+  m_PrefabInstance: {fileID: 2095790446}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2095790446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -404,10 +439,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 838267600}
     m_Modifications:
-    - target: {fileID: 2836004473841745626, guid: f432554f564e69242897607d34218939, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 894e8455598b5a943b2302b2b998b5df, type: 2}
     - target: {fileID: 2836004475591197023, guid: f432554f564e69242897607d34218939, type: 3}
       propertyPath: m_RootOrder
       value: -1
