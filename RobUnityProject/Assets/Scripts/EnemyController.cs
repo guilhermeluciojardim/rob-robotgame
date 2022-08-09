@@ -85,6 +85,7 @@ public class EnemyController : MonoBehaviour
     private void AttackPlayer(){
         //Make sure enemy doesn't move
         agent.SetDestination(transform.position);
+        Idle();
         //Make enemy look at player
         transform.LookAt(player);
 
@@ -108,6 +109,9 @@ public class EnemyController : MonoBehaviour
         if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround)){
             walkPointSet = true;
         }
+    }
+    private void Idle(){
+        anim.SetFloat("Speed", 0,0.1f,Time.deltaTime);
     }
     private void Walk(){
         

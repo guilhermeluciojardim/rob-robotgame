@@ -97,4 +97,5 @@ public class PlayerController : MonoBehaviour
     private void Reload(){
         anim.SetTrigger("Reload");
     }
+    
 }
