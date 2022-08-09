@@ -8,13 +8,17 @@
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/iuricode/README-template?style=for-the-badge)
 ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/iuricode/README-template?style=for-the-badge)
 
-> In this project, I'll be creating a game from a robot named Rob, where he travels and tries to find his way home by dodging obstacles, dealing with puzzles and other dangers in the way
+> In this project, I'll be creating a game from a soldier Rob, where he falls in an enemy area and tries to find his way to survive by shooting enemies, dodging obstacles, dealing with puzzles and other dangers in the way
 
 ### Next adjusts and improvements
 
-- [ ] Set cameras around the player
-- [ ] Create player controller
-- [ ] Create obstacles and map
+- [x] Set cameras around the player
+- [x] Create player controller
+- [x] Create AI for Enemy
+- [x] Creating shooting with particles
+- [ ] Create obstacles 
+- [ ] Create map
+- [ ] Create weather 
 - [ ] Create puzzles
 - [ ] Create Game Manager
 - [ ] Create Game Menu
