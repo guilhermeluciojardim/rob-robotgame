@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0884dceb0d4308c4eb8bc763c8f8deae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_templateMaterial: {fileID: 2100000, guid: f68f8c3a3d76fb74cbb880d372c81620, type: 2}
+  m_templateMaterial: {fileID: 2100000, guid: 0f6db39b293887c459e6c3aa6b9c65c1, type: 2}
   m_doNotOverwriteTemplateMaterialProperties: 1
   m_startPos: {x: 0, y: 0, z: 0}
   m_endPos: {x: 0, y: 0, z: 50}
@@ -131,7 +131,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 0.33982182, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.036886215, a: 1}
   m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
