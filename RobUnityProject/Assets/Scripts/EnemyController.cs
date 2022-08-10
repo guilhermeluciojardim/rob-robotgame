@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     public LayerMask whatIsGround, whatIsPlayer;
 
+    [SerializeField] int health;
+
     //Patrolling
     public Vector3 walkPoint;
     bool walkPointSet;
@@ -23,13 +25,17 @@ public class EnemyController : MonoBehaviour
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
-    //Refecences
+    //References
     private Animator anim;
     public GameObject shotPrefab;
     public Transform weaponPos;
     private CharacterController controller;
+    public GameObject explosionShot;
+    public GameObject explosionOnDeath;
 
     //Variables
+
+    private bool dead = false;
 
     private void Awake(){
         player = GameObject.Find("Player").transform;
@@ -47,18 +53,33 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      //Check for sight and attack range
-      playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-      playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        if (!dead){
+            //Check for sight and attack range
+            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange){
-            Patroling();
+            if (!playerInSightRange && !playerInAttackRange){
+                Patroling();
+            }
+            if (playerInSightRange && !playerInAttackRange){
+                ChasePlayer();
+            }
+            if (playerInAttackRange && playerInSightRange){
+                AttackPlayer();
+            }
         }
-        if (playerInSightRange && !playerInAttackRange){
-            ChasePlayer();
-        }
-        if (playerInAttackRange && playerInSightRange){
-            AttackPlayer();
+      
+    }
+
+    private void OnCollisionEnter(Collision coll){
+        if (coll.gameObject.name == "shot_prefab(Clone)"){
+            health -= 1;
+            GameObject blow = GameObject.Instantiate(explosionShot, coll.transform.position, coll.transform.rotation) as GameObject;
+            GameObject.Destroy(blow, 1f);
+            Destroy(coll.gameObject);
+            if (health <=0){
+                Die();
+            }
         }
     }
     
@@ -129,11 +150,13 @@ public class EnemyController : MonoBehaviour
     private void Reload(){
         anim.SetTrigger("Reload");
     }
-    private void OnDrawGizmosSelected(){
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
+
+    private void Die(){
+        anim.SetTrigger("Die");
+        dead = true;
+        GameObject exp = GameObject.Instantiate(explosionOnDeath, transform.position, transform.rotation) as GameObject;
+        GameObject.Destroy(exp, 1f);
+        GameObject.Destroy(gameObject, 3.5f);
     }
 
 }

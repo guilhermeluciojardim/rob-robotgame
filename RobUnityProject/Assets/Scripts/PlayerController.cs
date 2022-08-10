@@ -5,12 +5,16 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
    //Variables
-   [SerializeField] private float moveSpeed;
-   [SerializeField] private float walkSpeed;
-   [SerializeField] private float runSpeed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
 
-   private Vector3 moveDirection;
-   private Vector3 velocity;
+    private bool dead = false;
+
+    [SerializeField] private int health;
+   
+    private Vector3 moveDirection;
+    private Vector3 velocity;
 
     [SerializeField] private bool isGrounded;
     [SerializeField] private float groundCheckDistance;
@@ -20,19 +24,35 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpHeight;
 
    //References
-   private CharacterController controller;
-   private Animator anim;
+    private CharacterController controller;
+    private Animator anim;
+    public GameObject explosionShot;
 
-   private void Start(){
+    private void Start(){
         
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
-   }
+    }
 
     private void Update(){
-        Move();
-        if (Input.GetKeyDown(KeyCode.Mouse0)){
-            Shoot();
+        if (!dead){
+            Move();
+            if (Input.GetKeyDown(KeyCode.Mouse0)){
+                Shoot();
+            }
+        }
+        
+    }
+
+    private void OnCollisionEnter(Collision coll){
+        if (coll.gameObject.name == "shot_prefab_enemy(Clone)"){
+            health -= 1;
+            GameObject blow = GameObject.Instantiate(explosionShot, coll.transform.position, coll.transform.rotation) as GameObject;
+            GameObject.Destroy(blow, 1f);
+            Destroy(coll.gameObject);
+            if (health <=0){
+                Die();
+            }
         }
     }
 
@@ -96,6 +116,10 @@ public class PlayerController : MonoBehaviour
     }
     private void Reload(){
         anim.SetTrigger("Reload");
+    }
+    private void Die(){
+        anim.SetTrigger("Die");
+        dead=true;
     }
     
 }
