@@ -154,6 +154,7 @@ public class EnemyController : MonoBehaviour
     private void Die(){
         anim.SetTrigger("Die");
         dead = true;
+        GetComponent<Rigidbody>().freezeRotation = true;
         GameObject exp = GameObject.Instantiate(explosionOnDeath, transform.position, transform.rotation) as GameObject;
         GameObject.Destroy(exp, 1f);
         GameObject.Destroy(gameObject, 3.5f);

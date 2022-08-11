@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +12,15 @@ public class PlayerController : MonoBehaviour
 
     private bool dead = false;
 
-    [SerializeField] private int health;
+    private int health, maxHealth;
+    
+    private float weaponClip, weaponClipSize;
+
+    [SerializeField] private Scrollbar healthBar;
+    [SerializeField] private Scrollbar weaponBar;
+
+    [SerializeField] private GameObject shotPrefab;
+    [SerializeField] private Transform weaponPos;
    
     private Vector3 moveDirection;
     private Vector3 velocity;
@@ -32,6 +41,10 @@ public class PlayerController : MonoBehaviour
         
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+        weaponClip = 35;
+        weaponClipSize = 35;
+        health = 100;
+        maxHealth = 100;
     }
 
     private void Update(){
@@ -39,14 +52,15 @@ public class PlayerController : MonoBehaviour
             Move();
             if (Input.GetKeyDown(KeyCode.Mouse0)){
                 Shoot();
+                Fire();
             }
         }
-        
     }
 
     private void OnCollisionEnter(Collision coll){
         if (coll.gameObject.name == "shot_prefab_enemy(Clone)"){
             health -= 1;
+            healthBar.size -= 1f / maxHealth;
             GameObject blow = GameObject.Instantiate(explosionShot, coll.transform.position, coll.transform.rotation) as GameObject;
             GameObject.Destroy(blow, 1f);
             Destroy(coll.gameObject);
@@ -78,22 +92,20 @@ public class PlayerController : MonoBehaviour
             }
             else if (moveDirection == Vector3.zero){
             Idle();
+                if (Input.GetKeyDown(KeyCode.Mouse1)){
+                    Reload();
+                }
             }
             moveDirection *= moveSpeed;
 
             if (Input.GetKeyDown(KeyCode.Space)){
                 Jump();
             }
-            if (Input.GetKeyDown(KeyCode.R)){
-                Reload();
-            }
-            
         }     
 
         controller.Move(moveDirection * Time.deltaTime);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
-
     }
     private void Idle(){
         anim.SetFloat("Speed", 0,0.1f,Time.deltaTime);
@@ -116,10 +128,21 @@ public class PlayerController : MonoBehaviour
     }
     private void Reload(){
         anim.SetTrigger("Reload");
+        weaponClip = weaponClipSize;
+        weaponBar.size = 1f;
     }
     private void Die(){
         anim.SetTrigger("Die");
         dead=true;
+    }
+    private void Fire(){
+        if (weaponClip>0){
+            GameObject shot = GameObject.Instantiate(shotPrefab, weaponPos.position,weaponPos.rotation) as GameObject;
+		    GameObject.Destroy(shot, 2f);
+            weaponClip-=1f;
+            weaponBar.size-= 1f / weaponClipSize;
+        }
+        
     }
     
 }
