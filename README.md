@@ -14,14 +14,13 @@
 
 - [x] Set cameras around the player
 - [x] Create player controller
-- [x] Create AI for Enemy
+- [x] Create AI and Enemy controller
 - [x] Creating shooting with particles
-- [ ] Create obstacles 
-- [ ] Create map
-- [ ] Create weather 
+- [x] Create obstacles 
+- [x] Create objects behaviours
+- [x] Create map
+- [x] Create Game Menu
 - [ ] Create puzzles
-- [ ] Create Game Manager
-- [ ] Create Game Menu
 - [ ] Project Optimization
 - [ ] Build Project
 
