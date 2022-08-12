@@ -15,12 +15,14 @@ public class PlayerController : MonoBehaviour
     private int health, maxHealth;
     
     private float weaponClip, weaponClipSize;
+    private int keys;
 
     [SerializeField] private Scrollbar healthBar;
     [SerializeField] private Scrollbar weaponBar;
 
     [SerializeField] private GameObject shotPrefab;
     [SerializeField] private Transform weaponPos;
+    [SerializeField] private GameObject weapon;
    
     private Vector3 moveDirection;
     private Vector3 velocity;
@@ -41,20 +43,21 @@ public class PlayerController : MonoBehaviour
         
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
-        weaponClip = 35;
-        weaponClipSize = 35;
-        health = 100;
-        maxHealth = 100;
+        weaponClip = 35; weaponClipSize = 35;
+        health = 50; healthBar.size = 0.5f; maxHealth = 100;
+        keys=0;
     }
 
     private void Update(){
         if (!dead){
             Move();
+            Aim();
             if (Input.GetKeyDown(KeyCode.Mouse0)){
                 Shoot();
                 Fire();
             }
         }
+
     }
 
     private void OnCollisionEnter(Collision coll){
@@ -70,6 +73,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Aim(){
+        //Implement way for player to aim up and down
+    }
+
     private void Move(){
         isGrounded = Physics.CheckSphere(transform.position,groundCheckDistance, groundMask);
 
@@ -79,6 +86,7 @@ public class PlayerController : MonoBehaviour
 
         float moveZ = Input.GetAxis("Vertical");
         float moveX = Input.GetAxis("Horizontal");
+        
         
         moveDirection = new Vector3(moveX,0,moveZ);
         moveDirection = transform.TransformDirection(moveDirection);
@@ -141,8 +149,16 @@ public class PlayerController : MonoBehaviour
 		    GameObject.Destroy(shot, 2f);
             weaponClip-=1f;
             weaponBar.size-= 1f / weaponClipSize;
-        }
-        
+        } 
+    }
+    public void RecoverHealth(){
+        health+=5;
+        healthBar.size += 0.05f;
+        if (health>100) health=100;
+        if (healthBar.size > 1f) healthBar.size=1f;
+    }
+     public void FindKey(){
+        keys+=1;
     }
     
 }
