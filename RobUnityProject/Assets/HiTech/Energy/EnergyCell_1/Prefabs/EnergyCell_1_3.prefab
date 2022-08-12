@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: -6491108951913987461}
   m_Layer: 0
   m_Name: EnergyCell_1_3
-  m_TagString: Untagged
+  m_TagString: PowerShell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 10
   m_CollisionDetection: 0
 --- !u!1 &1341500235591690
 GameObject:

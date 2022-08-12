@@ -27,15 +27,18 @@ public class EnergyCellBehaviour : MonoBehaviour
             transform.Translate(Vector3.down * Time.deltaTime * 0.4f);
             if (transform.position.y <= FlyYMin) swapDirection = false;
         }
+        if (gameObject.CompareTag("HealthShell")){
+            GameObject.Destroy(gameObject, 20f);
+        }
     }
 
     private void OnCollisionEnter(Collision coll){
-        if (gameObject.name == "EnergyCell_1_3(Clone)"){
+        if ((gameObject.CompareTag("PowerShell")) && (coll.gameObject.CompareTag("Player"))){
             coll.gameObject.GetComponent<PlayerController>().FindKey();
             Destroy(gameObject);
         }
         else{
-            if (coll.gameObject.CompareTag("Player")){
+            if ((gameObject.CompareTag("HealthShell")) && (coll.gameObject.CompareTag("Player"))){
             coll.gameObject.GetComponent<PlayerController>().RecoverHealth();
             Destroy(gameObject);
     }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,19 +12,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
 
-    private bool dead = false;
+    private bool dead, powerShotCharged, firingPowerShot;
+
 
     private int health, maxHealth;
     
     private float weaponClip, weaponClipSize;
-    private int keys;
+    private float keys, totalKeys;
 
     [SerializeField] private Scrollbar healthBar;
     [SerializeField] private Scrollbar weaponBar;
+    [SerializeField] private Scrollbar powerBar;
 
     [SerializeField] private GameObject shotPrefab;
+    [SerializeField] private GameObject powerShotChargePrefab;
+    [SerializeField] private GameObject powerShotPrefab;
     [SerializeField] private Transform weaponPos;
     [SerializeField] private GameObject weapon;
+    [SerializeField] private TextMeshProUGUI gameoverText;
+    [SerializeField] private Button restartgameButton;
+
    
     private Vector3 moveDirection;
     private Vector3 velocity;
@@ -38,28 +47,49 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Animator anim;
     public GameObject explosionShot;
+    public CameraController playerCamera;
 
-    private void Start(){
-        
+    private void Start(){ 
         controller = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         weaponClip = 35; weaponClipSize = 35;
-        health = 50; healthBar.size = 0.5f; maxHealth = 100;
-        keys=0;
+        health = 70; healthBar.size = 0.7f; maxHealth = 100;
+        keys=0;  totalKeys=3; powerBar.size = 0f; powerShotCharged = false;
+        gameoverText.gameObject.SetActive(false);
+        restartgameButton.gameObject.SetActive(false);
+        dead = false; firingPowerShot=false;
+        
     }
 
     private void Update(){
         if (!dead){
-            Move();
             Aim();
-            if (Input.GetKeyDown(KeyCode.Mouse0)){
-                Shoot();
-                Fire();
-            }
+            if (!firingPowerShot){
+                Move();
+                if (Input.GetKeyDown(KeyCode.Mouse0)){
+                    Shoot();
+                    Fire();  
+                }   
+                if ((Input.GetKeyDown(KeyCode.LeftControl)) && (powerShotCharged)){
+                        PowerShot();
+                }
+            }  
         }
-
     }
 
+private void PowerShot(){
+    firingPowerShot = true;
+    GameObject powershotcharge = GameObject.Instantiate(powerShotChargePrefab, weaponPos.transform.position, weaponPos.transform.rotation) as GameObject;
+    GameObject.Destroy(powershotcharge, 5f);
+    StartCoroutine(WaitForPowerShotCharge(5));
+}
+IEnumerator WaitForPowerShotCharge (float waitTime){
+    yield return new WaitForSeconds(waitTime);
+    firingPowerShot = false;
+    GameObject powershot = GameObject.Instantiate(powerShotPrefab, weaponPos.transform.position, weaponPos.transform.rotation) as GameObject;
+    GameObject.Destroy(powershot, 5f);
+
+}
     private void OnCollisionEnter(Collision coll){
         if (coll.gameObject.name == "shot_prefab_enemy(Clone)"){
             health -= 1;
@@ -74,7 +104,18 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Aim(){
-        //Implement way for player to aim up and down
+        float aimX = Input.GetAxis("Mouse Y");
+        float aimXMax = 10;
+        if (aimX > aimXMax){
+            weaponPos.Rotate(-aimXMax,0,0);
+        }
+        else if (aimX < -aimXMax){
+            weaponPos.Rotate(aimXMax,0,0);
+        }
+        else{
+            weaponPos.Rotate(-aimX,0,0);
+        }
+        
     }
 
     private void Move(){
@@ -142,6 +183,10 @@ public class PlayerController : MonoBehaviour
     private void Die(){
         anim.SetTrigger("Die");
         dead=true;
+        gameoverText.gameObject.SetActive(true);
+        restartgameButton.gameObject.SetActive(true);
+        playerCamera.enabled = !playerCamera.enabled;
+        Cursor.lockState = CursorLockMode.None;
     }
     private void Fire(){
         if (weaponClip>0){
@@ -159,6 +204,14 @@ public class PlayerController : MonoBehaviour
     }
      public void FindKey(){
         keys+=1;
+        powerBar.size += (1/totalKeys) + 0.01f;
+        if (keys == 3){
+            powerShotCharged  =true;
+        }
+    }
+
+    public void RestartGame(){
+        SceneManager.LoadScene("Level - 0");
     }
     
 }
