@@ -53,7 +53,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!dead){
+        if ((!dead) && (!player.GetComponent<PlayerController>().IsPlayerDead())){
             //Check for sight and attack range
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
             playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -154,6 +154,7 @@ public class EnemyController : MonoBehaviour
     private void Die(){
         anim.SetTrigger("Die");
         dead = true;
+        GetComponent<AudioSource>().Play();
         GetComponent<Rigidbody>().freezeRotation = true;
         GameObject exp = GameObject.Instantiate(explosionOnDeath, transform.position, transform.rotation) as GameObject;
         GameObject.Destroy(exp, 1f);

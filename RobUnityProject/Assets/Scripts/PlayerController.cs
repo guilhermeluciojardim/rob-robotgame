@@ -12,10 +12,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
 
-    private bool dead, powerShotCharged, firingPowerShot;
+    private bool powerShotCharged, firingPowerShot, isReloading;
+    public bool dead;
 
-
-    private int health, maxHealth;
+    private int health, maxHealth, countdownForStepSound;
     
     private float weaponClip, weaponClipSize;
     private float keys, totalKeys;
@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform weaponPos;
     [SerializeField] private GameObject weapon;
     [SerializeField] private TextMeshProUGUI gameoverText;
-    [SerializeField] private Button restartgameButton;
 
    
     private Vector3 moveDirection;
@@ -42,6 +41,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravity;
 
     [SerializeField] private float jumpHeight;
+
+    [SerializeField] private AudioClip powerSheelFindSoundClip;
+
+    [SerializeField] private AudioClip stepsSound;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip reloadSound;
 
    //References
     private CharacterController controller;
@@ -56,8 +61,8 @@ public class PlayerController : MonoBehaviour
         health = 70; healthBar.size = 0.7f; maxHealth = 100;
         keys=0;  totalKeys=3; powerBar.size = 0f; powerShotCharged = false;
         gameoverText.gameObject.SetActive(false);
-        restartgameButton.gameObject.SetActive(false);
         dead = false; firingPowerShot=false;
+        isReloading=false;
         
     }
 
@@ -117,33 +122,40 @@ IEnumerator WaitForPowerShotCharge (float waitTime){
         }
         
     }
-
+    private void CreateStepSound(int time){
+        countdownForStepSound+=1;
+            if (countdownForStepSound == time){
+                GetComponent<AudioSource>().PlayOneShot(stepsSound);
+                countdownForStepSound=0;
+            }
+    }
     private void Move(){
         isGrounded = Physics.CheckSphere(transform.position,groundCheckDistance, groundMask);
 
         if ((isGrounded) && (velocity.y < 0)){
             velocity.y = -2f;
         }
-
         float moveZ = Input.GetAxis("Vertical");
         float moveX = Input.GetAxis("Horizontal");
-        
-        
+
         moveDirection = new Vector3(moveX,0,moveZ);
         moveDirection = transform.TransformDirection(moveDirection);
 
         if (isGrounded){
             if ((moveDirection != Vector3.zero) && (!Input.GetKey(KeyCode.LeftShift))){
-            Walk();
+                Walk();
+                CreateStepSound(30);
             }
             else if ((moveDirection != Vector3.zero) && (Input.GetKey(KeyCode.LeftShift))){
-            Run();
+                Run();
+                CreateStepSound(15);
             }
             else if (moveDirection == Vector3.zero){
-            Idle();
-                if (Input.GetKeyDown(KeyCode.Mouse1)){
-                    Reload();
-                }
+                Idle();
+                countdownForStepSound=0;
+                    if ((Input.GetKeyDown(KeyCode.Mouse1)) && (!isReloading) && (weaponClip < weaponClipSize)){
+                        Reload();
+                    }
             }
             moveDirection *= moveSpeed;
 
@@ -177,16 +189,25 @@ IEnumerator WaitForPowerShotCharge (float waitTime){
     }
     private void Reload(){
         anim.SetTrigger("Reload");
+        isReloading=true;
+        StartCoroutine(WaitForReload(3));
         weaponClip = weaponClipSize;
         weaponBar.size = 1f;
+        GetComponent<AudioSource>().PlayOneShot(reloadSound);
     }
+
+    IEnumerator WaitForReload(int waitTime){
+        yield return new WaitForSeconds(waitTime);
+        isReloading = false;
+    }
+
     private void Die(){
         anim.SetTrigger("Die");
         dead=true;
         gameoverText.gameObject.SetActive(true);
-        restartgameButton.gameObject.SetActive(true);
         playerCamera.enabled = !playerCamera.enabled;
         Cursor.lockState = CursorLockMode.None;
+        GetComponent<AudioSource>().PlayOneShot(deathSound);
     }
     private void Fire(){
         if (weaponClip>0){
@@ -201,6 +222,7 @@ IEnumerator WaitForPowerShotCharge (float waitTime){
         healthBar.size += 0.05f;
         if (health>100) health=100;
         if (healthBar.size > 1f) healthBar.size=1f;
+        GetComponent<AudioSource>().PlayOneShot(powerSheelFindSoundClip);
     }
      public void FindKey(){
         keys+=1;
@@ -208,10 +230,11 @@ IEnumerator WaitForPowerShotCharge (float waitTime){
         if (keys == 3){
             powerShotCharged  =true;
         }
+        GetComponent<AudioSource>().PlayOneShot(powerSheelFindSoundClip);
     }
 
-    public void RestartGame(){
-        SceneManager.LoadScene("Level - 0");
+    public bool IsPlayerDead(){
+        return dead;
     }
     
 }

@@ -39,13 +39,18 @@ public class SceneManagerLv0 : MonoBehaviour
 
             float maxDistance = Vector3.Distance(rocket.transform.position, ship.position);
             rocket.transform.position = rocket.transform.position + Vector3.ClampMagnitude(directionToMove, maxDistance);
+            
+            //Activates when the missile hits the ship
             if (rocket.transform.position == ship.transform.position){
                 Destroy(rocket);
+                ship.GetComponent<AudioSource>().Play(); // Play a alarm Sound
                 start=false;
                 end=true;
+                
                 GameObject explode = GameObject.Instantiate(rocketExplosion, ship.position, ship.rotation) as GameObject;
 		        GameObject.Destroy(explode, 2f);
                 ShakeCamera();
+                cameraTransform.GetComponent<AudioSource>().Play();
                 StartCoroutine(WaitforTime(5));
             }
         }
@@ -66,6 +71,7 @@ public class SceneManagerLv0 : MonoBehaviour
         {
             cameraTransform.localPosition = orignalCameraPos + Random.insideUnitSphere * shakeAmount;
             _shakeTimer -= Time.deltaTime;
+            ship.transform.Rotate(0.05f,0,0);
         }
         else
         {
@@ -78,16 +84,16 @@ public class SceneManagerLv0 : MonoBehaviour
     public void ActivateStartGame(){
         start=true;
         Text.SetActive(false);
+        rocket.GetComponent<AudioSource>().Play();
     }
 
     IEnumerator  WaitforTime(float waitTime){
         yield return new WaitForSeconds(waitTime);
         animFade.SetTrigger("Fade_Out");
-        StartCoroutine(WaitforSceneChange(2));
+        StartCoroutine(WaitforSceneChange(5));
     }
      IEnumerator  WaitforSceneChange(float waitTime){
         yield return new WaitForSeconds(waitTime);
         SceneManager.LoadScene("Level - 1");
     }
-
 }
