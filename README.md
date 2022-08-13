@@ -20,13 +20,13 @@
 - [x] Create objects behaviours
 - [x] Create map
 - [x] Create Game Menu
-- [ ] Create puzzles
-- [ ] Project Optimization
-- [ ] Build Project
+- [x] Create puzzles
+- [x] Project Optimization
+- [x] Build Project
 
-##  🎮 When the game gets playable the link will be provided here...
+##  🎮 Play and have Fun!!
 
-https://
+https://play.unity.com/mg/other/webgl-builds-232735
 
 ## 💻 System Requirements
 
