@@ -10,6 +10,8 @@
 
 > In this project, I'll be creating a game from a soldier Rob, where he falls in an enemy area and tries to find his way to survive by shooting enemies, dodging obstacles, dealing with puzzles and other dangers in the way
 
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/uW-_1e6rYss)
+
 ### Next adjusts and improvements
 
 - [x] Set cameras around the player
